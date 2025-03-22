@@ -29,33 +29,24 @@ def check_wmi():
         
         time.sleep(1)
     
-def find_phone():
-    phone = None
+def find_phone_directory():
+    folder_pc_path = r"C:\Users\kipov\Downloads\test_folder_download"
     shell = win32com.client.Dispatch("Shell.Application")
     mtp_devices = shell.Namespace(17)
     for item in mtp_devices.Items():
         if item.Path[:2] == '::': 
-            for i in item.Items():
-                print(i)
-            # print('item', item.Name, item.Path) 
-            # phone = item.InvokeVerb('Open')
-            # print(phone.Items())
-            # print('phone\n', [item for item in phone.Items()])
-    # device_list_path  = [item.Path for item in mtp_devices.Items()]
-    # device_list_name = [item.Name for item in mtp_devices.Items()]
-    # print(device_list_path, '\n\n', device_list_name)
-    # try:
-    #     print(os.scandir('Этот компьютер\\::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\\\\\?\\usb#vid_04e8&pid_6860&ms_comp_mtp&samsung_android#6&f1ec039&0&0000#{6ac27878-a6fa-4155-ba85-f98f491d4f33}\\Внутреннее хранилище'))
-    # except Exception as e:
-    #     print('e', e)
+            try:
+                folders = item.GetFolder.Items()
+                inside_folders = folders[0].GetFolder.Items()
+                for inside_folder in inside_folders:
+                    if inside_folder.Name == 'Documents':
+                        doc_folder = inside_folder.GetFolder.Items()
+                        for audio_folder in doc_folder:
+                            if audio_folder.Name == 'Audio':
+                                audio_items = audio_folder.GetFolder.Items()
+                                shell.Namespace(folder_pc_path).CopyHere(audio_items)
+                                print([audio_file.Name for audio_file in audio_items])
+            except Exception as e:
+                print('e', e)
 
-find_phone()
-
-
-
-#     # partitions = psutil.disk_partitions()
-#     client = AdbClient(host="127.0.0.1", port=5037) 
-#     devices = client.devices()
-#     # drives = win32api.GetLogicalDriveStrings().split('\000')[:-1]
-#     print(devices)
-#     time.sleep(1)
+find_phone_directory()
