@@ -5,7 +5,7 @@ from src.dto.base_dto import *
 
 import flet as ft
 
-from time import time
+from time import time, sleep
 from datetime import datetime
 
 from loguru import logger
@@ -19,6 +19,8 @@ class App:
         root: ft.Page, 
         data_service:DataService,
     ):
+        self.picked_report_id = None
+        
         
         self.__data_service = data_service
         
@@ -68,7 +70,7 @@ class App:
                 name=info_dict.name,
                 description=info_dict.description,
                 back_function=self.back_function,
-                add_audo_function= self.pick_file
+                add_audo_function= self.pick_file(info_dict.id_)
             )
             self.root.clean()
             self.root.add(self.report_view.get_view())
@@ -105,12 +107,38 @@ class App:
     def back_function(self, e):
         self.root.clean()
         self.root.add(self.data_view.get_view())
-        
-    def pick_file(self, e):
-        print('picking')
-        self.file_picker.pick_files(allow_multiple=True)
-        print('picked')
+    
+    
+    def pick_file(self, report_id:str):
+        def inner(e):
+            self.file_picker.pick_files(allow_multiple=True)
+            self.picked_report_id = report_id
+        return inner
         
     def on_dialog_result(self, e: ft.FilePickerResultEvent):
-        print("Selected files:", e.files)
-        print("Selected file or directory:", e.path)
+        print(self.picked_report_id)
+        self.root.overlay.append(
+            ft.Container(
+                ft.Row(
+                    [
+                        ft.Column(
+                            [
+                            ft.ProgressRing(width=16, height=16, stroke_width = 3)
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER
+                        )
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
+                bgcolor=ft.colors.BLACK12
+            )
+           
+            
+        )
+        self.root.update()
+        for file in e.files:
+            print(file.path)
+            sleep(1)
+        self.picked_report_id = None
+        self.root.overlay.clear()
+        self.root.update()

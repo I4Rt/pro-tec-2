@@ -4,7 +4,7 @@ from pathlib import Path
 import json
 import os
 from loguru import logger
-
+from time import time
 
 
 class DataService:
@@ -26,6 +26,7 @@ class DataService:
             )
         os.mkdir(self.fs_route.joinpath(pure_report_dto.id_).joinpath('tracks'))
         os.mkdir(self.fs_route.joinpath(pure_report_dto.id_).joinpath('decode'))
+        os.mkdir(self.fs_route.joinpath(pure_report_dto.id_).joinpath('meta'))
         
     def get_reports_list(self) -> list[ReportDTO]:
         reports = []
@@ -46,3 +47,19 @@ class DataService:
             except Exception as e:
                 logger.warning(f'get_reports_list: {e}')
         return reports
+    
+    def add_audio(
+        self,
+        markup_dto:MarkdownDTO,
+        audio,
+        report_id:str
+    ):
+        try:
+            data_id = str(int(time() * 100))
+            with open(self.fs_route.joinpath(report_id).joinpath('decode').joinpath(f'{data_id}.txt')) as file:
+                file.write(
+                    markup_dto.model_dump_json()
+                )
+            
+        except Exception as e:
+            print(e)
