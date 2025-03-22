@@ -13,7 +13,9 @@ class TableValuesWidget:
     COMMENT_COLUMN_WIDTH    = 300
     ACTIONS_COLUMN_WIDTH    = 150
     
-    def __init__(self):
+    def __init__(
+        self
+    ):
         self.__data = {}
         self.__columns=[
             ft.Text("начало", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER, width=self.START_TIME_COLUMN_WIDTH),

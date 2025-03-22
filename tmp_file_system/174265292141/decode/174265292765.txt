@@ -1,0 +1,1 @@
+{"markup_id":"174265292765","start_time":"start","end_time":"end","deep":27.652229070663452,"step":"step","comment":"123 123 123 123 123 123 123 ","audio_path":"C:\\Users\\Марков Владимир\\Documents\\GitHub\\pro-tec-2\\converted.wav","raw_text":"C:\\Users\\Марков Владимир\\Pictures\\markup_tool.jpg"}

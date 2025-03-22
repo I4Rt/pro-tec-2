@@ -5,7 +5,7 @@ from datetime import datetime
 from src.dto.base_dto import *
 
 class ReportPageView:
-    def __init__(self, report_dto: ReportDTO, back_function, add_audo_function):
+    def __init__(self, report_dto: ReportDTO, edit_function, back_function, add_audo_function):
         
         self.report_state = report_dto
         
@@ -36,7 +36,9 @@ class ReportPageView:
             bgcolor=ft.colors.GREEN_900
         )
         
-        self.values_table = TableValuesWidget()
+        self.values_table = TableValuesWidget(
+        )
+        self.__edit_function = edit_function
         
         for markup in self.report_state.markdown_list:
             self.values_table.add_col_row(
@@ -46,7 +48,7 @@ class ReportPageView:
                 deep=markup.deep,
                 step=markup.step,
                 comment=markup.comment,
-                edit_function = lambda e: e,
+                edit_function = self.__edit_function(markup.raw_text),
                 del_function  = lambda e: e
             )
         
@@ -61,7 +63,7 @@ class ReportPageView:
                 deep=markup.deep,
                 step=markup.step,
                 comment=markup.comment,
-                edit_function = lambda e: e,
+                edit_function = self.__edit_function(markup.raw_text),
                 del_function  = lambda e: e
             )
         

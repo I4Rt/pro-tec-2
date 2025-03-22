@@ -2,7 +2,7 @@ from src.services.data_service import DataService
 from src.components_view.data_page_view import DataPageView
 from src.components_view.report_page_view import ReportPageView
 from src.dto.base_dto import *
-
+from src.widgets.text_edit_widget import TextEditWidget
 import flet as ft
 
 from time import time, sleep
@@ -20,7 +20,7 @@ class App:
         data_service:DataService,
     ):
         self.picked_report_id = None
-        
+        self.tew = None # text edit widget
         
         self.__data_service = data_service
         
@@ -67,6 +67,7 @@ class App:
             
             self.report_view = ReportPageView(
                 report_dto,
+                edit_function=self.edit_markup,
                 back_function=self.back_function,
                 add_audo_function= self.pick_file(report_dto.id_)
             )
@@ -110,9 +111,44 @@ class App:
     
     def pick_file(self, report_id:str):
         def inner(e):
+            self.root.overlay.clear()
+            self.root.overlay.extend(
+                [self.file_picker]
+            )
+            self.root.update()
             self.file_picker.pick_files(allow_multiple=True)
             self.picked_report_id = report_id
         return inner
+    
+    def edit_markup(
+        self,
+        text: str
+    ):
+        def save_(e):
+            print(self.tew.plain_text.value)
+            
+        
+        def clear_overlay(e):
+            self.root.overlay.clear()
+            self.root.update()
+            
+        self.tew = TextEditWidget(
+            text,
+            save_function=save_,
+            back_function=clear_overlay
+        )
+        
+        
+        
+            
+        def iner(e):
+            
+            self.root.overlay.clear()
+            self.root.overlay.append(
+                self.tew.get_view()
+            )
+            self.root.update()
+        return iner
         
     def on_dialog_result(self, e: ft.FilePickerResultEvent):
         print(self.picked_report_id)
@@ -138,25 +174,26 @@ class App:
         
         
         self.root.update()
-        for file in e.files:
-            print(file.path)
-            
-            markup_dto = MarkdownDTO(
-                markup_id=str(int(time() * 100)),
-                start_time='start',
-                end_time='end',
-                deep=time()%100,
-                step='step',
-                comment='123 '*int(time()%10), 
-                audio_path=r'C:\Users\Марков Владимир\Documents\GitHub\pro-tec-2\converted.wav',
-                raw_text=file.path
-            )
-            self.__data_service.add_audio(
-                markup_dto,
-                str(self.picked_report_id),
-            )
-            self.report_view.report_state.markdown_list.append(markup_dto)
-            sleep(0.5)
+        if e.files is not None:
+            for file in e.files:
+                print(file.path)
+                
+                markup_dto = MarkdownDTO(
+                    markup_id=str(int(time() * 100)),
+                    start_time='start',
+                    end_time='end',
+                    deep=time()%100,
+                    step='step',
+                    comment='123 '*int(time()%10), 
+                    audio_path=r'C:\Users\Марков Владимир\Documents\GitHub\pro-tec-2\converted.wav',
+                    raw_text=file.path
+                )
+                self.__data_service.add_audio(
+                    markup_dto,
+                    str(self.picked_report_id),
+                )
+                self.report_view.report_state.markdown_list.append(markup_dto)
+                sleep(0.5)
             
         
         
