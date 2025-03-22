@@ -8,7 +8,7 @@ class DataPageView:
         
         self.button = ft.ElevatedButton(
             text="добавить отчет",
-            icon=ft.icons.CHECK
+            icon=ft.icons.ADD
         )
 
     def get_view(self):

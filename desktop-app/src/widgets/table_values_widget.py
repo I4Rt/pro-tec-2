@@ -6,11 +6,11 @@ class TableValuesWidget:
     WIDTH    = 1000
     HEIGHT   = 500
     
-    START_TIME_COLUMN_WIDTH = 150
-    END_TIME_COLUMN_WIDTH   = 150
+    START_TIME_COLUMN_WIDTH = 120
+    END_TIME_COLUMN_WIDTH   = 120
     DEEPTH_COLUMN_WIDTH     = 100 
     STEP_COLUMN_WIDTH       = 100
-    COMMENT_COLUMN_WIDTH    = 250
+    COMMENT_COLUMN_WIDTH    = 300
     ACTIONS_COLUMN_WIDTH    = 150
     
     def __init__(self):
@@ -19,7 +19,7 @@ class TableValuesWidget:
             ft.Text("начало", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER, width=self.START_TIME_COLUMN_WIDTH),
             ft.Text("окончание", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER, width=self.END_TIME_COLUMN_WIDTH),
             ft.Text("забой", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER, width=self.DEEPTH_COLUMN_WIDTH),
-            ft.Text("этап'", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER, width=self.STEP_COLUMN_WIDTH),
+            ft.Text("этап", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER, width=self.STEP_COLUMN_WIDTH),
             ft.Text("комментарий", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER, width=self.COMMENT_COLUMN_WIDTH),
             ft.Text("действия", weight=ft.FontWeight.BOLD, text_align=ft.TextAlign.CENTER, width=self.COMMENT_COLUMN_WIDTH),
         ]
@@ -92,7 +92,8 @@ class TableValuesWidget:
             ft.DataColumn(
                 ft.Text(
                     str(items[0][1][2]),
-                    width=self.DEEPTH_COLUMN_WIDTH
+                    width=self.DEEPTH_COLUMN_WIDTH,
+                    text_align=ft.TextAlign.CENTER
                 ),
             ),
             ft.DataColumn(
@@ -145,7 +146,8 @@ class TableValuesWidget:
                         ft.DataCell(
                             ft.Text(
                                 str(pair[1][2]),
-                                width=self.DEEPTH_COLUMN_WIDTH
+                                width=self.DEEPTH_COLUMN_WIDTH,
+                                text_align=ft.TextAlign.CENTER
                             ),
                         ),
                         ft.DataCell(

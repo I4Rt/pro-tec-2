@@ -1,5 +1,6 @@
 import flet as ft
 from datetime import datetime
+from src.dto.base_dto import *
 class TableWidget:
     WIDTH    = 1000
     HEIGHT   = 500
@@ -45,13 +46,11 @@ class TableWidget:
     
     def add_col_row(
         self,
-        id,
-        name,
-        edit_time,
+        report:PureReportDTO,
         open_function,
         del_function
     ):
-        self.__data[id] = (name, edit_time)
+        self.__data[report.id_] = (report.name, report.edit_time)
         self._update_table(open_function, del_function)
         
     def _update_table(self, open_function, del_function):

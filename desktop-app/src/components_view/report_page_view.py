@@ -4,7 +4,7 @@ from time import time
 from datetime import datetime
 
 class ReportPageView:
-    def __init__(self, id_, name, description, back_function):
+    def __init__(self, id_, name, description, back_function, add_audo_function):
         
         self.id_field = ft.Text(str(f'id: {id_}'), width=200)
         self.name_field = ft.TextField(
@@ -24,6 +24,13 @@ class ReportPageView:
             text="назад",
             icon=ft.icons.ARROW_BACK,
             on_click=back_function
+        )
+        
+        self.select_files_button = ft.ElevatedButton(
+            text="Добавить",
+            icon=ft.icons.UPLOAD_FILE,
+            on_click=add_audo_function,
+            bgcolor=ft.colors.GREEN_900
         )
         
         self.values_table = TableValuesWidget()
@@ -49,6 +56,8 @@ class ReportPageView:
         )
         
         
+        
+        
 
     def get_view(self):
         return ft.Row(
@@ -72,6 +81,13 @@ class ReportPageView:
                             alignment=ft.MainAxisAlignment.SPACE_BETWEEN
                         ),
                         self.description_field,
+                        ft.Row(
+                            [
+                                self.select_files_button, 
+                            ],
+                            width=1000,
+                            alignment=ft.MainAxisAlignment.END,
+                        ),
                         self.values_table.get_view()
                         
                         
