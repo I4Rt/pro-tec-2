@@ -13,6 +13,8 @@ from loguru import logger
 import os
 from pathlib import Path
 
+from src.services.audio_analize import AudioAnalize
+
 class App:
     def __init__(
         self,
@@ -53,10 +55,16 @@ class App:
             )
         self.data_view.button.on_click = lambda e: self.add_report(e)
         self.root.add(self.data_view.get_view())
-        
+        self.audioAnalize = AudioAnalize()
         
     
-    
+    def test_parse(self):
+        try:
+            analized_text = self.audioAnalize.return_table_data('время начала 10 время окончания 20 забой 54.2 этап курва ля курва комментарий абв', 'audio.wav')
+            print('analized_text: ', analized_text)
+        except Exception as e:
+            print('analized_text error', e)
+        
     def open_report(self, report_dto:ReportDTO):
         def inner(e):
             print('open function')
@@ -174,9 +182,10 @@ class App:
         
         
         self.root.update()
+
         if e.files is not None:
             for file in e.files:
-                print(file.path)
+                print(file.pathfile.path)
                 
                 markup_dto = MarkdownDTO(
                     markup_id=str(int(time() * 100)),
@@ -193,7 +202,8 @@ class App:
                     str(self.picked_report_id),
                 )
                 self.report_view.report_state.markdown_list.append(markup_dto)
-                sleep(0.5)
+
+
             
         
         
