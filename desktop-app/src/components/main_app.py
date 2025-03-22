@@ -56,6 +56,7 @@ class App:
             )
         self.data_view.button.on_click = lambda e: self.add_report(e)
         self.root.add(self.data_view.get_view())
+
         self.audio_analize_service = AudioAnalizeService()
         
     # def test_parse(self):
@@ -64,6 +65,7 @@ class App:
     #         print('analized_text: ', analized_text)
     #     except Exception as e:
     #         print('analized_text error', e)
+
         
     def open_report(self, report_dto:ReportDTO):
         

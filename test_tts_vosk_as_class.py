@@ -9,7 +9,7 @@ from src.dto.base_dto import *
 import re
 
 
-class AudioAnalizeService:
+class AudioAnalize:
 
     def __init__(self):
         self.frame_rate = 16000
@@ -17,16 +17,14 @@ class AudioAnalizeService:
         self.channels = 1
         self.read_framerates = 4000
 
-        # self.recognizer = self.create_recognizer() # with vosk
-        self.recognizer = sr.Recognizer() # with google
+        self.recognizer = self.create_recognizer()
 
-        self.keywords = ['время начала', 'время начало', 'время окончания', 'забой', 'забои', 'за бой', 'этап', 'комментарий']
+        self.keywords = ['время начала', 'время окончания', 'забой', 'этап', 'комментарий']
 
     def get_next_elem(self, keyword_index):
-        return self.parts[keyword_index]
-        # index = self.parts.index(self.keywords[keyword_index])
-        # value = self.parts[index + 1] if index + 1 < len(self.parts) else ''
-        # return value
+        index = self.parts.index(self.keywords[keyword_index])
+        value = self.parts[index + 1] if index + 1 < len(self.parts) else ''
+        return value
 
     def return_table_data(self, raw_text, file_path):
         pattern = r'\b(' + '|'.join(map(re.escape, self.keywords)) + r')\b'
@@ -35,11 +33,11 @@ class AudioAnalizeService:
 
         markup_dto = MarkdownDTO(
             markup_id=str(int(time.time() * 100)),
-            start_time=self.get_next_elem(1),
-            end_time=self.get_next_elem(3),
-            deep=self.get_next_elem(5),
-            step=self.get_next_elem(7),
-            comment=self.get_next_elem(9), 
+            start_time=self.get_next_elem(0),
+            end_time=self.get_next_elem(1),
+            deep=self.get_next_elem(2),
+            step=self.get_next_elem(3),
+            comment=self.get_next_elem(4), 
             audio_path=file_path,
             raw_text=raw_text
         )
@@ -47,7 +45,7 @@ class AudioAnalizeService:
 
     def create_recognizer(self):
         try:
-            model = Model(r"models\vosk-model-ru-0.42")
+            model = Model(r"D:\GitHub\pro-tec-2\models\vosk-model-ru-0.42")
             recognizer = KaldiRecognizer(model, self.frame_rate)
             return recognizer
         except Exception as e:
@@ -74,18 +72,6 @@ class AudioAnalizeService:
         except Exception as e:
             print('e', e)
 
-    def recognize_audio_from_file(self, audio_file):
-        with sr.AudioFile(audio_file) as source:
-            print("Распознавание текста...")
-            audio = self.recognizer.record(source)  # Читаем весь файл
-            try:
-                text = self.recognizer.recognize_google(audio, language='ru-RU')
-                return text
-            except sr.UnknownValueError:
-                print("Не удалось распознать текст.")
-            except sr.RequestError as e:
-                print(f"Ошибка сервиса распознавания: {e}")
-
     def get_audio(self, file_path):
         wf = wave.open(file_path, "rb")
         if wf.getnchannels() != self.channels or wf.getsampwidth() != self.sample_width or wf.getframerate() != self.frame_rate:
@@ -94,10 +80,10 @@ class AudioAnalizeService:
             wf = wave.open(file_path, "rb")
             print('convert audio')
         print(file_path)
-        # text = self.analize_audio(wf) # with vosk
-        text = self.recognize_audio_from_file(file_path) # with google
+        text = self.analize_audio(wf)
         print("Расшифровка: ", text)
         return self.return_table_data(text, file_path)
+        # return text
         
 
     def get_audio_files(self, folder_path):
@@ -105,5 +91,4 @@ class AudioAnalizeService:
             if file_name[-4:] == '.wav':
                 file_path = os.path.join(folder_path, file_name)
                 return self.get_audio(file_path)
-    
                 

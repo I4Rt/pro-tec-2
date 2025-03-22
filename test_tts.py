@@ -1,41 +1,60 @@
-import torch
-# from TTS.api import TTS
+import wave
 import speech_recognition as sr
-import os
+import pyaudio
 
-# device = "cuda" if torch.cuda.is_available() else "cpu"
+def record_audio_to_file(output_file):
+    # Настройки записи
+    chunk = 1024  # Размер блока
+    format = pyaudio.paInt16  # Формат записи
+    channels = 1  # Количество каналов (моно)
+    rate = 16000  # Частота дискретизации
 
-# print(TTS().list_models())
+    sr_recognizer = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("🔄 Подстройка под окружающий шум...")
+        sr_recognizer.adjust_for_ambient_noise(source, duration=2)  # Калибровка по шуму
 
-# tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
+    # Инициализация PyAudio
+    p = pyaudio.PyAudio()
+    stream = p.open(format=format, channels=channels, rate=rate, input=True, frames_per_buffer=chunk)
 
-speech_text = 'В глубинах нашего воображения таится мир, полный неизведанных чудес и удивительных приключений. Этот мир доступен каждому из нас, в тот момент, когда мы позволяем своему уму раскрыть свои крылья и унести нас в удивительные путешествия.'
-recognizer = sr.Recognizer()
+    print("🎤 Запись началась. Нажмите Ctrl+C для завершения...")
+    frames = []
 
+    try:
+        while True:
+            data = stream.read(chunk)
+            frames.append(data)
+    except KeyboardInterrupt:
+        print("⏹ Запись завершена.")
+    finally:
+        # Останавливаем и закрываем поток
+        stream.stop_stream()
+        stream.close()
+        p.terminate()
 
-with sr.Microphone() as source2:
-    print('silence please')
-    recognizer.adjust_for_ambient_noise(source2, duration=2)
-    while True:
-        print('speak please')
-        audio = recognizer.listen(source2)
-        # with open('listened_audio.wav', 'wb') as file:
-        #     file.write(audio.get_wav_data())
+        # Сохраняем аудио в файл
+        with wave.open(output_file, 'wb') as wf:
+            wf.setnchannels(channels)
+            wf.setsampwidth(p.get_sample_size(format))
+            wf.setframerate(rate)
+            wf.writeframes(b''.join(frames))
+        print(f"✅ Аудио сохранено в файл: {output_file}")
+
+def recognize_audio_from_file(audio_file):
+    recognizer = sr.Recognizer()
+    with sr.AudioFile(audio_file) as source:
+        print("🎧 Распознавание текста...")
+        audio = recognizer.record(source)  # Читаем весь файл
         try:
-            print(f'распознавание google: ', recognizer.recognize_google(audio, language='ru-RU').lower())
-            print(f'распознавание sphinx: ', recognizer.recognize_sphinx(audio, language="ru-RU").lower())
-        except sr.exceptions.UnknownValueError as e:
-            print('UnknownValueError', e, type(audio))
-            continue
-        # read_text = text.lower()
-        # print('read_text: ', read_text)
+            text = recognizer.recognize_google(audio, language='ru-RU')
+            print("📝 Распознанный текст:", text)
+        except sr.UnknownValueError:
+            print("❌ Не удалось распознать текст.")
+        except sr.RequestError as e:
+            print(f"❌ Ошибка сервиса распознавания: {e}")
 
-# Run TTS
-# ❗ Since this model is multi-lingual voice cloning model, we must set the target speaker_wav and language
-# Text to speech list of amplitude values as output
-# wav = tts.tts(text=speech_text, speaker_wav="voice.wav", language="ru")
-# Text to speech to a file
-
-# print('final round')
-# tts.tts_to_file(text=speech_text, speaker_wav="listened_audio.wav", language="ru", file_path="output.wav")
-# os.system(f"start output.wav")
+if __name__ == "__main__":
+    audio_file = "recorded_audio.wav"
+    record_audio_to_file(audio_file)  # Записываем аудио
+    recognize_audio_from_file(audio_file)  # Распознаем текст из записанного файла
