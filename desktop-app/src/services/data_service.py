@@ -10,7 +10,7 @@ from loguru import logger
 class DataService:
     
     def __init__(self):
-        self.fs_route = Path("/home/i4rt/git/pro-tec-2/tmp_file_system")
+        self.fs_route = Path("tmp_file_system")
         
     def add_report(self, pure_report_dto:PureReportDTO):
         os.mkdir(self.fs_route.joinpath(pure_report_dto.id_))
