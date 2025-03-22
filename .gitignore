@@ -1,3 +1,4 @@
 *.pyc
 local_test/*
 build/*
+vosk-model-ru-0.42/*
