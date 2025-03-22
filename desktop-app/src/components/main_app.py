@@ -13,6 +13,8 @@ from loguru import logger
 import os
 from pathlib import Path
 
+from src.services.audio_analize import AudioAnalize
+
 class App:
     def __init__(
         self,
@@ -53,10 +55,16 @@ class App:
             )
         self.data_view.button.on_click = lambda e: self.add_report(e)
         self.root.add(self.data_view.get_view())
-        
+        self.audioAnalize = AudioAnalize()
         
     
-    
+    def test_parse(self):
+        try:
+            analized_text = self.audioAnalize.return_table_data('время начала 10 время окончания 20 забой 54.2 этап курва ля курва комментарий абв', 'audio.wav')
+            print('analized_text: ', analized_text)
+        except Exception as e:
+            print('analized_text error', e)
+        
     def open_report(self, report_dto:ReportDTO):
         def inner(e):
             print('open function')
@@ -148,7 +156,7 @@ class App:
                 deep=time()%100,
                 step='step',
                 comment='123 '*int(time()%10), 
-                audio_path=r'C:\Users\Марков Владимир\Documents\GitHub\pro-tec-2\converted.wav',
+                audio_path=r'D:\GitHub\pro-tec-2\converted.wav',
                 raw_text=file.path
             )
             self.__data_service.add_audio(

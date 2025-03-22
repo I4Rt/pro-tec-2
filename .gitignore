@@ -2,3 +2,5 @@
 local_test/*
 build/*
 vosk-model-ru-0.42/*
+vosk-model-ru-0.42.zip
+models/*
