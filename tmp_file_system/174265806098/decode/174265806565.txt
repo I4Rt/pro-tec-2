@@ -1,1 +1,0 @@
-{"markup_id":"174265806565","start_time":"start","end_time":"end","deep":65.65156602859497,"step":"step","comment":"123 123 123 123 123 ","audio_path":"D:\\GitHub\\pro-tec-2\\converted.wav","raw_text":"C:\\Users\\kipov\\Documents\\Lab2.pbix"}

@@ -56,7 +56,7 @@ class TableValuesWidget:
     
     def add_col_row(
         self,
-        id,
+        id_,
         start_time,
         end_time,
         deep,
@@ -65,14 +65,14 @@ class TableValuesWidget:
         edit_function,
         del_function
     ):
-        self.__data[id] = (
+        self.__data[id_] = (
             start_time,
             end_time,
             deep,
             step,
             comment
         )
-        logger.info(self.__data)
+        # logger.info(self.__data)
         self._update_table(edit_function, del_function)
         
     def _update_table(self, edit_function, del_function):

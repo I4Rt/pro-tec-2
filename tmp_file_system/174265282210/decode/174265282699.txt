@@ -1,1 +1,0 @@
-{"markup_id":"174265282699","start_time":"start","end_time":"end","deep":26.992658138275146,"step":"step","comment":"123 123 123 123 123 123 ","audio_path":"C:\\Users\\Марков Владимир\\Documents\\GitHub\\pro-tec-2\\converted.wav","raw_text":"C:\\Users\\Марков Владимир\\Pictures\\cam_detection_tool.jpg"}

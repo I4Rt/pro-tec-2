@@ -1,1 +1,0 @@
-{"markup_id":"174265440719","start_time":"start","end_time":"end","deep":7.190719842910767,"step":"step","comment":"123 123 123 123 123 123 123 ","audio_path":"C:\\Users\\Марков Владимир\\Documents\\GitHub\\pro-tec-2\\converted.wav","raw_text":"D:\\GitHub\\pro-tec-2\\check.py"}

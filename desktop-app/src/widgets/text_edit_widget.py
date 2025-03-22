@@ -1,6 +1,8 @@
 import flet as ft
 from datetime import datetime
 from src.dto.base_dto import *
+from loguru import logger
+
 class TextEditWidget:
     WIDTH    = 1000
     HEIGHT   = 500
@@ -11,21 +13,26 @@ class TextEditWidget:
     
     def __init__(
             self,
-            text:str,
+            report_id:str,
+            markup_dto:MarkdownDTO,
             save_function,
             back_function
-        ):
+    ):
+        logger.error(f'{markup_dto.markup_id} {markup_dto.raw_text}')
+        self.report_id = report_id
+        self.markup_dto = markup_dto
         self.plain_text = ft.TextField(
-            value=text,
+            value=markup_dto.raw_text,
             height=200,
-            min_lines=4,
-            bgcolor=ft.colors.WHITE24
+            min_lines=10,
+            multiline=True,
+            bgcolor=ft.colors.WHITE24,
         )
         self.save_button = ft.ElevatedButton(
             text="save",
             icon=ft.icons.ARROW_BACK,
             on_click=save_function,
-            bgcolor=ft.colors.GREEN_900
+            bgcolor=ft.colors.GREEN_ACCENT
         )
         
         self.back_button = ft.ElevatedButton(
@@ -53,13 +60,13 @@ class TextEditWidget:
                                         alignment=ft.MainAxisAlignment.END
                                     )
                                 ],
-                                alignment=ft.MainAxisAlignment.SPACE_AROUND
+                                expand=True
                             ),
                             padding=20,
-                            bgcolor=ft.colors.BLACK,
+                            bgcolor=ft.colors.WHITE,
                             border_radius=10,
                             width=400,
-                            height=400
+                            height=300
                             
                         ),
                         

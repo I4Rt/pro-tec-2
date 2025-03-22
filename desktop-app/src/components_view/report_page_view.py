@@ -3,6 +3,7 @@ from src.widgets.table_values_widget import TableValuesWidget
 from time import time
 from datetime import datetime
 from src.dto.base_dto import *
+from loguru import logger
 
 class ReportPageView:
     def __init__(self, report_dto: ReportDTO, edit_function, back_function, add_audo_function):
@@ -33,14 +34,15 @@ class ReportPageView:
             text="Добавить",
             icon=ft.icons.UPLOAD_FILE,
             on_click=add_audo_function,
-            bgcolor=ft.colors.GREEN_900
+            bgcolor=ft.colors.GREEN_ACCENT,
+            col=ft.colors.WHITE
         )
         
-        self.values_table = TableValuesWidget(
-        )
+        self.values_table = TableValuesWidget()
         self.__edit_function = edit_function
         
         for markup in self.report_state.markdown_list:
+            logger.warning(markup.markup_id)
             self.values_table.add_col_row(
                 markup.markup_id,
                 start_time=markup.start_time,
@@ -48,14 +50,14 @@ class ReportPageView:
                 deep=markup.deep,
                 step=markup.step,
                 comment=markup.comment,
-                edit_function = self.__edit_function(markup.raw_text),
+                edit_function = lambda e: self.__edit_function(self.report_state.id_, markup),
                 del_function  = lambda e: e
             )
         
     def update_table(self):
         self.values_table = TableValuesWidget()
         for markup in self.report_state.markdown_list:
-            print(markup)
+            logger.warning(markup.markup_id)
             self.values_table.add_col_row(
                 markup.markup_id,
                 start_time=markup.start_time,
@@ -63,7 +65,7 @@ class ReportPageView:
                 deep=markup.deep,
                 step=markup.step,
                 comment=markup.comment,
-                edit_function = self.__edit_function(markup.raw_text),
+                edit_function = lambda e: self.__edit_function(self.report_state.id_, markup),
                 del_function  = lambda e: e
             )
         

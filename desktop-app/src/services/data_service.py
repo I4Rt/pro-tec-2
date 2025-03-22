@@ -56,6 +56,7 @@ class DataService:
         report_id:str
     ):
         # try:
+
             with open(self.fs_route.joinpath(report_id).joinpath('decode').joinpath(f'{markup_dto.markup_id}.txt'), 'w') as file:
                 file.write(
                     markup_dto.model_dump_json()
@@ -73,10 +74,21 @@ class DataService:
             with open(self.fs_route.joinpath(report_id).joinpath('decode').joinpath(file_name)) as file:
                 try:
                     audio_list.append(
-                        MarkdownDTO.model_validate_json(file.read())
+                        MarkdownDTO.model_validate_json(file.read())    
                     )
                 except Exception as e:
                     logger.error(
                         f'__get_audio_list: {e}'
                     )
         return audio_list
+    
+    def edit_markup(
+        self,
+        report_id,
+        markup_dto:MarkdownDTO
+    ):
+        
+        with open(self.fs_route.joinpath(report_id).joinpath('decode').joinpath(f'{markup_dto.markup_id}.txt'), 'w') as file:
+            file.write(
+                markup_dto.model_dump_json()
+            )
