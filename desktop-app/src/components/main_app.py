@@ -1,25 +1,5 @@
 import flet as ft
-
-
-class MainPage:
-    def __init__(self):
-        self.text_field = ft.TextField(label="Введите текст")
-        self.button = ft.ElevatedButton(
-            text="Нажми меня",
-            icon=ft.icons.CHECK
-        )
-
-    def get_view(self):
-        """Возвращает готовый UI."""
-        return ft.Column(
-            [
-                self.text_field,
-                self.button,
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-        )
-            
-
+from src.components_view.main_page_view import MainPage
 
 # Класс для логики приложения
 class App:
@@ -35,7 +15,7 @@ class App:
         self.root.padding=ft.padding.symmetric(0, 10)
 
         # Создаем экземпляр верстки
-        self.main_page = MainPage()
+        self.main_page = main_view
 
     def init(self):
         self.main_page.button.on_click = lambda e: self.show_snackbar(e, self.main_page.text_field.value)
@@ -63,8 +43,6 @@ class App:
             actions=[
                 ft.TextButton("Ok", on_click = lambda e: self.root.close(alter_dialog)),
             ],
-            
-            
         )
         
         self.root.open(
@@ -73,15 +51,4 @@ class App:
         
         self.root.update()
         
-
-
-# Запуск приложения
-def main(page: ft.Page):
-    app = App(
-        page,
-        MainPage()
-    )
-    app.init()
     
-
-ft.app(target=main)
