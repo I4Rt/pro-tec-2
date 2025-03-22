@@ -2,18 +2,21 @@ import flet as ft
 from src.widgets.table_values_widget import TableValuesWidget
 from time import time
 from datetime import datetime
+from src.dto.base_dto import *
 
 class ReportPageView:
-    def __init__(self, id_, name, description, back_function, add_audo_function):
+    def __init__(self, report_dto: ReportDTO, back_function, add_audo_function):
         
-        self.id_field = ft.Text(str(f'id: {id_}'), width=200)
+        self.report_state = report_dto
+        
+        self.id_field = ft.Text(str(f'id: {report_dto.id_}'), width=200)
         self.name_field = ft.TextField(
-            value=name, 
+            value=report_dto.name, 
             width=700, 
             bgcolor=ft.colors.WHITE24,
         )
         self.description_field=ft.TextField(
-            value=description,
+            value=report_dto.description,
             width=1000,
             height=100,
             min_lines=3,
@@ -34,28 +37,33 @@ class ReportPageView:
         )
         
         self.values_table = TableValuesWidget()
-        self.values_table.add_col_row(
-            str(int(time()*100)),
-            start_time=str(datetime.now()),
-            end_time=str(datetime.now()),
-            deep=int(time()*10000)%100,
-            step='бурение',
-            comment='comment ' * (int(time()) % 10),
-            edit_function = lambda e: e,
-            del_function  = lambda e: e
-        )
-        self.values_table.add_col_row(
-            str(int(time()*100) + 1),
-            start_time=str(datetime.now()),
-            end_time=str(datetime.now()),
-            deep=int(time()*10000)%100,
-            step='ковыряние',
-            comment='comment ' * (int(time()) % 10),
-            edit_function = lambda e: e,
-            del_function  = lambda e: e
-        )
         
+        for markup in self.report_state.markdown_list:
+            self.values_table.add_col_row(
+                markup.markup_id,
+                start_time=markup.start_time,
+                end_time=markup.end_time,
+                deep=markup.deep,
+                step=markup.step,
+                comment=markup.comment,
+                edit_function = lambda e: e,
+                del_function  = lambda e: e
+            )
         
+    def update_table(self):
+        self.values_table = TableValuesWidget()
+        for markup in self.report_state.markdown_list:
+            print(markup)
+            self.values_table.add_col_row(
+                markup.markup_id,
+                start_time=markup.start_time,
+                end_time=markup.end_time,
+                deep=markup.deep,
+                step=markup.step,
+                comment=markup.comment,
+                edit_function = lambda e: e,
+                del_function  = lambda e: e
+            )
         
         
 

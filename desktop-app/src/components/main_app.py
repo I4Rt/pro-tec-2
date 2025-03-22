@@ -57,7 +57,7 @@ class App:
         
     
     
-    def open_report(self, info_dict:PureReportDTO):
+    def open_report(self, report_dto:ReportDTO):
         def inner(e):
             print('open function')
             self.root.overlay.clear()
@@ -66,11 +66,9 @@ class App:
             )
             
             self.report_view = ReportPageView(
-                id_=info_dict.id_,
-                name=info_dict.name,
-                description=info_dict.description,
+                report_dto,
                 back_function=self.back_function,
-                add_audo_function= self.pick_file(info_dict.id_)
+                add_audo_function= self.pick_file(report_dto.id_)
             )
             self.root.clean()
             self.root.add(self.report_view.get_view())
@@ -84,10 +82,11 @@ class App:
         name = f'Замеры произведенные в соответствии с {time()}'
         edit_time=str(datetime.now())
         
-        report = PureReportDTO(
+        report = ReportDTO(
             id_ = id_,
             name= name,
             edit_time = edit_time,
+            markdown_list = [],
             description = ''
         )
         
@@ -117,6 +116,8 @@ class App:
         
     def on_dialog_result(self, e: ft.FilePickerResultEvent):
         print(self.picked_report_id)
+        
+        
         self.root.overlay.append(
             ft.Container(
                 ft.Row(
@@ -132,13 +133,37 @@ class App:
                 ),
                 bgcolor=ft.colors.BLACK12
             )
-           
-            
         )
+        
+        
+        
         self.root.update()
         for file in e.files:
             print(file.path)
-            sleep(1)
+            
+            markup_dto = MarkdownDTO(
+                markup_id=str(int(time() * 100)),
+                start_time='start',
+                end_time='end',
+                deep=time()%100,
+                step='step',
+                comment='123 '*int(time()%10), 
+                audio_path=r'C:\Users\Марков Владимир\Documents\GitHub\pro-tec-2\converted.wav',
+                raw_text=file.path
+            )
+            self.__data_service.add_audio(
+                markup_dto,
+                str(self.picked_report_id),
+            )
+            self.report_view.report_state.markdown_list.append(markup_dto)
+            sleep(0.5)
+            
+        
+        
         self.picked_report_id = None
+        
+        self.report_view.update_table()
+        self.root.clean()
+        self.root.add(self.report_view.get_view())
         self.root.overlay.clear()
         self.root.update()

@@ -5,6 +5,8 @@ import json
 import os
 from loguru import logger
 from time import time
+import shutil
+
 
 
 class DataService:
@@ -12,7 +14,7 @@ class DataService:
     def __init__(self):
         self.fs_route = Path("tmp_file_system")
         
-    def add_report(self, pure_report_dto:PureReportDTO):
+    def add_report(self, pure_report_dto:ReportDTO):
         os.mkdir(self.fs_route.joinpath(pure_report_dto.id_))
         with open(self.fs_route.joinpath(pure_report_dto.id_).joinpath('report_info.txt'), 'w') as file:
             file.write(
@@ -41,7 +43,7 @@ class DataService:
                             name          = data['name'],
                             description   = data['description'],
                             edit_time     = data['edit_time'],
-                            markdown_list = []
+                            markdown_list = self.__get_audio_list(id_)
                         )
                     )
             except Exception as e:
@@ -51,15 +53,30 @@ class DataService:
     def add_audio(
         self,
         markup_dto:MarkdownDTO,
-        audio,
         report_id:str
     ):
-        try:
-            data_id = str(int(time() * 100))
-            with open(self.fs_route.joinpath(report_id).joinpath('decode').joinpath(f'{data_id}.txt')) as file:
+        # try:
+            with open(self.fs_route.joinpath(report_id).joinpath('decode').joinpath(f'{markup_dto.markup_id}.txt'), 'w') as file:
                 file.write(
                     markup_dto.model_dump_json()
                 )
+            shutil.copyfile(
+                markup_dto.audio_path,
+                self.fs_route.joinpath(report_id).joinpath('tracks').joinpath(f'{markup_dto.markup_id}.wav')
+            )
+        # except Exception as e:
+        #     print(e)
             
-        except Exception as e:
-            print(e)
+    def __get_audio_list(self, report_id) -> list[MarkdownDTO]:
+        audio_list = []
+        for file_name in os.listdir(self.fs_route.joinpath(report_id).joinpath('decode')):
+            with open(self.fs_route.joinpath(report_id).joinpath('decode').joinpath(file_name)) as file:
+                try:
+                    audio_list.append(
+                        MarkdownDTO.model_validate_json(file.read())
+                    )
+                except Exception as e:
+                    logger.error(
+                        f'__get_audio_list: {e}'
+                    )
+        return audio_list

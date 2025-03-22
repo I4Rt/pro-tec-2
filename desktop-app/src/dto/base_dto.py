@@ -1,11 +1,14 @@
 from pydantic import BaseModel
 
 class MarkdownDTO(BaseModel):
-    start_time:str
-    end_time:  str
-    deep:      float
-    step:      str
-    comment:   str
+    markup_id:  str
+    start_time: str
+    end_time:   str
+    deep:       float
+    step:       str
+    comment:    str
+    audio_path: str
+    raw_text:   str
 
 
 class PureReportDTO(BaseModel):
