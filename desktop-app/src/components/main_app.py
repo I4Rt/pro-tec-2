@@ -56,12 +56,14 @@ class App:
         self.data_view.button.on_click = lambda e: self.add_report(e)
         self.root.add(self.data_view.get_view())
         self.audioAnalize = AudioAnalize()
+              
         
     
     def test_parse(self):
         try:
-            analized_text = self.audioAnalize.return_table_data('время начала 10 время окончания 20 забой 54.2 этап курва ля курва комментарий абв', 'audio.wav')
-            print('analized_text: ', analized_text)
+            print(self.audioAnalize.get_audio(r"D:\GitHub\pro-tec-2\recorded_audio.wav")) # audio
+            # analized_text = self.audioAnalize.return_table_data('время начала 10 время окончания 20 забой 54.2 этап курва ля курва комментарий абв', 'audio.wav') # text
+            # print('analized_text: ', analized_text)
         except Exception as e:
             print('analized_text error', e)
         
