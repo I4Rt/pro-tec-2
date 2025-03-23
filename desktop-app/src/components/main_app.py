@@ -56,7 +56,6 @@ class App:
             )
         self.data_view.button.on_click = lambda e: self.add_report(e)
         self.root.add(self.data_view.get_view())
-
         self.audio_analize_service = AudioAnalizeService()
         
     # def test_parse(self):
@@ -65,7 +64,20 @@ class App:
     #         print('analized_text: ', analized_text)
     #     except Exception as e:
     #         print('analized_text error', e)
-
+              
+    def test_parse(self):
+        try:
+            result = self.audioAnalize.get_audio(r"D:\GitHub\pro-tec-2\recorded_audio.wav") # audio
+            print(
+                f'\nСырая запись: {result.raw_text}\n\n', 
+                f'\t\tОбработанные данные\n',
+                f'Время начала, время окончания, забой,   этап,     комментарий\n',
+                f'{result.start_time}, \t     {result.end_time}, \t{result.deep}, \t{result.step},     {result.comment}\n',
+            )
+            # analized_text = self.audioAnalize.return_table_data('время начала 10 время окончания 20 забой 54.2 этап курва ля курва комментарий абв', 'audio.wav') # text
+            # print('analized_text: ', analized_text)
+        except Exception as e:
+            print('analized_text error', e)
         
     def open_report(self, report_dto:ReportDTO):
         
@@ -219,7 +231,7 @@ class App:
                     deep=time()%100,
                     step='step',
                     comment='123 '*int(time()%10), 
-                    audio_path=file.path,
+                    audio_path=r'D:\GitHub\pro-tec-2\recorded_audio.wav',
                     raw_text=file.path
                 )
                 self.__data_service.add_audio(
