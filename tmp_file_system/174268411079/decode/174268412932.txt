@@ -1,1 +1,0 @@
-{"markup_id":"174268412932","start_time":"start","end_time":"end","deep":29.323615074157715,"step":"step","comment":"123 123 123 123 123 123 123 123 123 ","audio_path":"C:\\Users\\Марков Владимир\\Music\\3.wav","raw_text":"123123123"}

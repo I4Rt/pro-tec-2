@@ -13,6 +13,7 @@ class DataService:
     
     def __init__(self):
         self.fs_route = Path("tmp_file_system")
+        self.save_route = Path("reports")
         
     def add_report(self, pure_report_dto:ReportDTO):
         os.mkdir(self.fs_route.joinpath(pure_report_dto.id_))
@@ -49,6 +50,17 @@ class DataService:
             except Exception as e:
                 logger.warning(f'get_reports_list: {e}')
         return reports
+    
+    def get_report(self, report_id) -> ReportDTO:
+        with open(self.fs_route.joinpath(str(report_id)).joinpath('report_info.txt'), 'r') as file:
+            data = json.loads(file.read())
+            return ReportDTO(
+                    id_           = report_id,
+                    name          = data['name'],
+                    description   = data['description'],
+                    edit_time     = data['edit_time'],
+                    markdown_list = self.__get_audio_list(report_id)
+                )
     
     def add_audio(
         self,
@@ -92,3 +104,6 @@ class DataService:
             file.write(
                 markup_dto.model_dump_json()
             )
+        
+    def get_csv(report_id:str):
+        return 

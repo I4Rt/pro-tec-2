@@ -156,19 +156,29 @@ class App:
         
         def save_(e):
             self.tew.markup_dto.raw_text = self.tew.plain_text.value
-            
+            new_dto = self.audio_analize_service.return_table_data(
+                self.tew.plain_text.value,
+                self.tew.markup_dto.audio_path
+            )
+            new_dto.markup_id = self.tew.markup_dto.markup_id
+            print(new_dto)
             self.__data_service.edit_markup(
                 self.tew.report_id,
-                self.tew.markup_dto
+                new_dto
             )
-            for i in range(len(self.report_view.report_state.markdown_list)):
-                if self.tew.markup_dto.markup_id == self.report_view.report_state.markdown_list[i].markup_id:
-                    self.report_view.report_state.markdown_list[i] = self.tew.markup_dto
-                    break
             
-                
-            self.report_view.update_table()
             
+            report = self.__data_service.get_report(report_id)
+            self.report_view = None
+            self.report_view = ReportPageView(
+                report,
+                edit_function=self.edit_markup,
+                back_function=self.back_function,
+                add_audo_function= self.pick_file(report.id_)
+            )
+            print(report.markdown_list)
+            self.root.clean()
+            self.root.add(self.report_view.get_view())
             self.tew = None
             self.root.overlay.clear()
             self.root.update()
@@ -223,17 +233,17 @@ class App:
         if e.files is not None:
             for file in e.files:
                 print(file.path)
-                # markup_dto =self.audio_analize.get_audio(file.path)
-                markup_dto = MarkdownDTO(
-                    markup_id=str(int(time() * 100)),
-                    start_time='start',
-                    end_time='end',
-                    deep=time()%100,
-                    step='step',
-                    comment='123 '*int(time()%10), 
-                    audio_path=r'D:\GitHub\pro-tec-2\recorded_audio.wav',
-                    raw_text=file.path
-                )
+                markup_dto =self.audio_analize_service.get_audio(file.path)
+                # markup_dto = MarkdownDTO(
+                #     markup_id=str(int(time() * 100)),
+                #     start_time='start',
+                #     end_time='end',
+                #     deep=time()%100,
+                #     step='step',
+                #     comment='123 '*int(time()%10), 
+                #     audio_path=file.path,
+                #     raw_text=file.path
+                # )
                 self.__data_service.add_audio(
                     markup_dto,
                     str(self.picked_report_id),
