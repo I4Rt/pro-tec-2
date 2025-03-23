@@ -51,7 +51,7 @@ class App:
         for report in reports:
             self.data_view.table.add_col_row(
                 report,
-                save_func     = lambda e: e,
+                save_func     = self.get_csv_func(report.id_),
                 open_function = lambda e: self.open_report(report),
                 del_function  = lambda e: e
             )
@@ -120,14 +120,22 @@ class App:
         
         self.data_view.table.add_col_row(
             report,
-            save_func     = lambda e: e,
+            save_func     = self.get_csv_func(report.id_),
             open_function = lambda e: self.open_report(report),
             del_function  = lambda e: e
         )
         
         self.root.clean()
         self.root.add(self.data_view.get_view())
-        
+    
+    def get_csv_func(
+        self,
+        report_id
+    ):
+        def inner(e):
+            self.__data_service.get_csv(report_id)
+        return inner    
+    
     def back_function(self, e):
         self.root.clean()
         self.root.add(self.data_view.get_view())

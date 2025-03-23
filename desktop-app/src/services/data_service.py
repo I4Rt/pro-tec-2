@@ -107,12 +107,14 @@ class DataService:
             )
         
     # Функция для сохранения ReportDTO в CSV
-    def get_csv(report: ReportDTO, filename: str):
+    def get_csv(self, report_id: str):
+        
+        report = self.get_report(report_id)
         # Определяем заголовки столбцов
         fieldnames = ["markup_id", "start_time", "end_time", "deep", "step", "comment", "audio_path", "raw_text"]
         
         # Открываем файл для записи
-        with open(filename, mode='w', newline='', encoding='utf-8') as file:
+        with open(self.save_route.joinpath(f'report-{report.id_}.csv'), mode='w', newline='', encoding='utf-8') as file:
             writer = csv.DictWriter(file, fieldnames=fieldnames)
             
             # Записываем заголовки

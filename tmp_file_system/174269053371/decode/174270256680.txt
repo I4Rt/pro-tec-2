@@ -1,0 +1,1 @@
+{"markup_id":"174270256680","start_time":"11:00","end_time":"12:35","deep":1245.0,"step":"бурения","comment":"ремонт","audio_path":"C:\\Users\\Марков Владимир\\Documents\\GitHub\\pro-tec-2\\test-records\\noizy_record.wav","raw_text":"время начало 11:00 время окончания 12:35 забой 1245 этап бурения комментарий ремонт"}
