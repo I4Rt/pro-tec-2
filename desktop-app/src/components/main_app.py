@@ -51,6 +51,7 @@ class App:
         for report in reports:
             self.data_view.table.add_col_row(
                 report,
+                save_func     = lambda e: e,
                 open_function = lambda e: self.open_report(report),
                 del_function  = lambda e: e
             )
@@ -107,6 +108,7 @@ class App:
         
         self.data_view.table.add_col_row(
             report,
+            save_func     = lambda e: e,
             open_function = lambda e: self.open_report(report),
             del_function  = lambda e: e
         )

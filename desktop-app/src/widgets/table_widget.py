@@ -47,13 +47,14 @@ class TableWidget:
     def add_col_row(
         self,
         report:PureReportDTO,
+        save_func,
         open_function,
         del_function
     ):
         self.__data[report.id_] = (report.name, report.edit_time)
-        self._update_table(open_function, del_function)
+        self._update_table(save_func, open_function, del_function)
         
-    def _update_table(self, open_function, del_function):
+    def _update_table(self, save_func, open_function, del_function):
         items = list(self.__data.items())
         rows = []
         first_row = [
@@ -71,7 +72,12 @@ class TableWidget:
             ),
             ft.DataColumn(
                 ft.Row(
-                    [
+                    [   
+                        ft.ElevatedButton(
+                            text="save",
+                            icon=ft.icons.DOWNLOAD,
+                            on_click=save_func
+                        ), 
                         ft.ElevatedButton(
                             text="open",
                             icon=ft.icons.OPEN_IN_FULL,
@@ -107,6 +113,11 @@ class TableWidget:
                         ft.DataCell(
                             ft.Row(
                                 [
+                                    ft.ElevatedButton(
+                                        text="save",
+                                        icon=ft.icons.DOWNLOAD,
+                                        on_click=save_func,
+                                    ), 
                                     ft.ElevatedButton(
                                         text="open",
                                         icon=ft.icons.OPEN_IN_FULL,
