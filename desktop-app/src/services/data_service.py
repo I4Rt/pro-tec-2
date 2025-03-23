@@ -6,6 +6,7 @@ import os
 from loguru import logger
 from time import time
 import shutil
+import csv
 
 
 
@@ -105,5 +106,18 @@ class DataService:
                 markup_dto.model_dump_json()
             )
         
-    def get_csv(report_id:str):
-        return 
+    # Функция для сохранения ReportDTO в CSV
+    def get_csv(report: ReportDTO, filename: str):
+        # Определяем заголовки столбцов
+        fieldnames = ["markup_id", "start_time", "end_time", "deep", "step", "comment", "audio_path", "raw_text"]
+        
+        # Открываем файл для записи
+        with open(filename, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            
+            # Записываем заголовки
+            writer.writeheader()
+            
+            # Записываем данные из markdown_list
+            for markdown in report.markdown_list:
+                writer.writerow(markdown.dict())
