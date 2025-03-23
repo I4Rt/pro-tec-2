@@ -13,6 +13,7 @@ class DataService:
     
     def __init__(self):
         self.fs_route = Path("tmp_file_system")
+        self.save_route = Path("reports")
         
     def add_report(self, pure_report_dto:ReportDTO):
         os.mkdir(self.fs_route.joinpath(pure_report_dto.id_))
@@ -103,3 +104,6 @@ class DataService:
             file.write(
                 markup_dto.model_dump_json()
             )
+        
+    def get_csv(report_id:str):
+        return 
