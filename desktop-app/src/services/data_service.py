@@ -50,6 +50,17 @@ class DataService:
                 logger.warning(f'get_reports_list: {e}')
         return reports
     
+    def get_report(self, report_id) -> ReportDTO:
+        with open(self.fs_route.joinpath(str(report_id)).joinpath('report_info.txt'), 'r') as file:
+            data = json.loads(file.read())
+            return ReportDTO(
+                    id_           = report_id,
+                    name          = data['name'],
+                    description   = data['description'],
+                    edit_time     = data['edit_time'],
+                    markdown_list = self.__get_audio_list(report_id)
+                )
+    
     def add_audio(
         self,
         markup_dto:MarkdownDTO,

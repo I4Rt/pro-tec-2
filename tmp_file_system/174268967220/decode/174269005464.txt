@@ -1,0 +1,1 @@
+{"markup_id":"174269005464","start_time":"8:30","end_time":"9:30","deep":657.0,"step":"строительство","comment":"Доброе утро мир","audio_path":"C:\\Users\\Марков Владимир\\Documents\\GitHub\\pro-tec-2\\test-records\\record.wav","raw_text":"время начало 8:30 время окончания 9:30 забой 657 этап строительство комментарий Доброе утро мир"}

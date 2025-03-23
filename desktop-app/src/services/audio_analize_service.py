@@ -28,8 +28,9 @@ class AudioAnalizeService:
         # value = self.parts[index + 1] if index + 1 < len(self.parts) else ''
         # return value
 
-    def return_table_data(self, raw_text, file_path):
+    def return_table_data(self, raw_text:str, file_path):
         pattern = r'\b(' + '|'.join(map(re.escape, self.keywords)) + r')\b'
+        raw_text = raw_text.replace('.', '')
         parts = re.split(pattern, raw_text)
         self.parts = [part.strip() for part in parts if part.strip()]
 
